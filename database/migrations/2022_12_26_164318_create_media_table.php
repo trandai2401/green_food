@@ -20,7 +20,7 @@ class CreateMediaTable extends Migration
             $table->unsignedBigInteger("type_media_id");
 
             $table->foreign('product_id')->references("id")->on("products");
-            $table->foreign('media_type_id')->references("id")->on("media_types");
+            $table->foreign('type_media_id')->references("id")->on("media_types");
 
             $table->timestamps();
         });

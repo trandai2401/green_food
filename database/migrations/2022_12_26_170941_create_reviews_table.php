@@ -16,6 +16,10 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('invoice_item_id');
+            $table->string('content');
+            $table->integer('rating');
+
+
             $table->timestamps();
         });
     }
