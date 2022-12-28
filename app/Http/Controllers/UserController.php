@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -17,7 +18,8 @@ class UserController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'DOB' => $request->DOB,
-            'role_id' => $request->role_id,
+            'role_id' => 1,
+            'api_token' => Str::random(80),
         ]);
     }
 }
