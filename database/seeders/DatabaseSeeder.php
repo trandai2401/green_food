@@ -19,5 +19,11 @@ class DatabaseSeeder extends Seeder
 
         $role = new RoleSeeder;
         $role->run();
+
+        $product = new ProductSeeder;
+        $product->run();
+
+        $typeMedia = new MediaTypeSeeder;
+        $typeMedia->run();
     }
 }

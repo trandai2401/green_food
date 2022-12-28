@@ -14,4 +14,19 @@ class Category extends Model
     protected $fillable = [
         'name', 'url_image', 'url_icon',
     ];
+    protected $with = ['products'];
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
+
+
+    public function get4Product()
+    {
+        return Product::where('category_id', $this->id)->limit(4)->get();
+    }
 }
