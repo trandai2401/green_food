@@ -19,15 +19,20 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('api_token', 80)
+                ->unique()
+                ->nullable()
+                ->default(null);
             $table->rememberToken();
 
-            $table->string('username');
-            $table->string('phone');
-            $table->string('address');
+            $table->string('username')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
             $table->unsignedBigInteger('role_id');
-            $table->date('DOB');
-            $table->string('google_id');
+            $table->date('DOB')->nullable();
+            $table->string('google_id')->nullable();
             $table->foreign('role_id')->references('id')->on('roles');
+
 
             $table->timestamps();
         });
