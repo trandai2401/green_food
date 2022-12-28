@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
@@ -52,3 +53,5 @@ Route::post("log_out", [AuthController::class, 'logOut'])->withoutMiddleware('au
 Route::get("check", function () {
     return Auth::user();
 });
+
+Route::get('search', [SearchController::class, 'index'])->withoutMiddleware('auth:api');
