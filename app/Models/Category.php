@@ -14,7 +14,9 @@ class Category extends Model
     protected $fillable = [
         'name', 'url_image', 'url_icon',
     ];
-    protected $with = ['products'];
+    protected $hidden = [
+        'created_at', 'updated_at',
+    ];
     public function products()
     {
         return $this->hasMany(Product::class);

@@ -24,8 +24,17 @@ class Product extends Model
         'category_id',
         'files'
     ];
+
+    protected $hidden = [
+        'created_at', 'updated_at',
+    ];
     public function medias()
     {
         return $this->hasMany(Media::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

@@ -43,8 +43,6 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-
-        // dd($request->file('file')[0]->getMimeType());
         $product = Product::create([
             'name' => $request->name,
             'price' => $request->price,
@@ -68,9 +66,10 @@ class ProductController extends Controller
             $media['url'] = url("img/{$image->getClientOriginalName()}");
             $media->save();
         }
+
         $product->load('medias');
+
         return $product;
-        // return url('img/WIN_20221227_18_36_26_Pro.jpg');
     }
 
     /**
@@ -79,9 +78,11 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::find($id);
+        $product->load('category');
+        return $product;
     }
 
     /**
