@@ -35,17 +35,17 @@ Route::prefix('cart_item')->group(function () {
 
 Route::prefix('products')->group(function () {
     Route::get('/{id}', [ProductController::class, 'show']);
-    Route::get('', [ProductController::class, 'index']);
+    Route::get('', [ProductController::class, 'index'])->withoutMiddleware('auth:api');
     Route::post('', [ProductController::class, 'store']);
 });
 Route::prefix('categories')->group(function () {
-    Route::get('', [CategoryController::class, 'index']);
+    Route::get('', [CategoryController::class, 'index'])->withoutMiddleware('auth:api');;
     Route::post('', [CategoryController::class, 'store']);
 });
 
 Route::prefix('users')->group(function () {
     Route::get('', [UserController::class, 'index']);
-    Route::post('', [UserController::class, 'store']);
+    Route::post('', [UserController::class, 'store'])->withoutMiddleware('auth:api');;
 });
 
 Route::post("sign_in", [AuthController::class, 'signIn'])->withoutMiddleware('auth:api');

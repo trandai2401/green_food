@@ -29,6 +29,6 @@ class Category extends Model
 
     public function get4Product()
     {
-        return Product::where('category_id', $this->id)->limit(4)->get();
+        return $this->hasMany(Product::class)->limit(4);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,10 +22,22 @@ class DatabaseSeeder extends Seeder
         $role = new RoleSeeder;
         $role->run();
 
+        User::create([
+            'name' => "admin",
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('12345'),
+            'username' => 'admin',
+            'role_id' => 1,
+            'api_token' => Str::random(80),
+        ]);
+
         $product = new ProductSeeder;
         $product->run();
 
         $typeMedia = new MediaTypeSeeder;
         $typeMedia->run();
+
+        $cartItem = new CartItemSeeder;
+        $cartItem->run();
     }
 }

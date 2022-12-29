@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -36,5 +37,15 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function sumSold()
+    {
+        $rs = $this->hasMany(CartItem::class)->where('activity', false)->select('product_id', DB::raw('SUM(quantity) as total_quantity'))->groupBy('cart_items.product_id');
+        // $sum = 0;
+        // foreach ($rs as $row) {
+        //     $sum += $row->quantity;
+        // }
+        // $s = 0;
+        return $rs;
     }
 }
