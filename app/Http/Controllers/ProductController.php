@@ -19,10 +19,11 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $data = [];
-        foreach ($categories as $category) {
-            $data["$category->name"] = $category->get4Product();
-        }
-        return $data;
+        $categories->load('get4Product');
+        // foreach ($categories as $category) {
+        //     $data["$category->name"] = $category->get4Product();
+        // }
+        return $categories;
     }
 
     /**
