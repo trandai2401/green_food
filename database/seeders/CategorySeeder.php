@@ -17,31 +17,32 @@ class CategorySeeder extends Seeder
         //
         Category::firstOrCreate([
             'name' => 'Trái cây',
-            'url_image' => '#',
+            'url_image' => 'http://localhost:8000/img/categories/traicay.png',
             'url_icon' => '#'
         ]);
 
         Category::firstOrCreate([
-            'name' => 'Vật phẩm khô',
-            'url_image' => '#',
+            'name' => 'Thực phẩm khô',
+            'url_image' => 'http://localhost:8000/img/categories/thucphamkho.png',
             'url_icon' => '#'
         ]);
 
         Category::firstOrCreate([
             'name' => 'Rau củ',
-            'url_image' => '#',
+            'url_image' => 'http://localhost:8000/img/categories/raucu.png',
             'url_icon' => '#'
         ]);
 
         Category::firstOrCreate([
             'name' => 'Thịt tươi',
-            'url_image' => '#',
+            'url_image' => 'http://localhost:8000/img/categories/thittuoi.png',
             'url_icon' => '#'
         ]);
 
+
         Category::firstOrCreate([
             'name' => 'Hải sản',
-            'url_image' => '#',
+            'url_image' => 'http://localhost:8000/img/categories/haisan.png',
             'url_icon' => '#'
         ]);
     }

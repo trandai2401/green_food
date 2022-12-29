@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
         $category = new CategorySeeder;
         $category->run();
 
+        $typeMedia = new MediaTypeSeeder;
+        $typeMedia->run();
+
         $role = new RoleSeeder;
         $role->run();
 
@@ -34,8 +37,6 @@ class DatabaseSeeder extends Seeder
         $product = new ProductSeeder;
         $product->run();
 
-        $typeMedia = new MediaTypeSeeder;
-        $typeMedia->run();
 
         $cartItem = new CartItemSeeder;
         $cartItem->run();
