@@ -561,14 +561,14 @@ class ProductSeeder extends Seeder
 
         //4
         $product = Product::create([
-            'name' => '',
+            'name' => 'Cá Rô',
             'category_id' => 5,
             'price' => 22000,
         ]);
         $product->medias()->saveMany([
-            new Media(['type_media_id' => 1, 'url' => 'http://localhost:8000/img/']),
-            new Media(['type_media_id' => 1, 'url' => 'http://localhost:8000/img/']),
-            new Media(['type_media_id' => 1, 'url' => 'http://localhost:8000/img/']),
+            new Media(['type_media_id' => 1, 'url' => 'http://localhost:8000/img/cá rô.png']),
+            new Media(['type_media_id' => 1, 'url' => 'http://localhost:8000/img/cá rô phi 3.png']),
+            new Media(['type_media_id' => 1, 'url' => 'http://localhost:8000/img/cá rô phi 2.png']),
         ]);
 
 
