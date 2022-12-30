@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
+use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -16,6 +18,11 @@ class InvoiceController extends Controller
     public function index()
     {
         //
+        $user_id  = Auth::id();
+        $invoices = Invoice::whereRaw(" user_id = ?", [$user_id]);
+
+        $invoices = $invoices->get();
+        return $invoices;
     }
 
     /**
@@ -36,7 +43,29 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoiceRequest $request)
     {
-        //
+        $user_id  = Auth::id();
+
+        $invoices = Invoice::create([
+            'user_id' => $user_id,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'transport_fee' => $request->transport_fee,
+            'status_id' => 1,
+            'district_id' => $request->district_id
+        ]);
+
+        $cartItems = CartItem::where('user_id', $user_id)
+            ->where('activity', 1)
+            ->get();
+
+        foreach ($cartItems as $item) {
+            $item->payment($invoices->id);
+            $invoices->total += $item->product->price * $item->quantity;
+        }
+
+        $invoices->save();
+
+        return ($invoices);
     }
 
     /**
