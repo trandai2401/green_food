@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
@@ -52,6 +53,11 @@ Route::post("sign_in", [AuthController::class, 'signIn'])->withoutMiddleware('au
 Route::post("log_out", [AuthController::class, 'logOut'])->withoutMiddleware('auth:api');
 Route::get("check", function () {
     return Auth::user();
+});
+
+Route::prefix('invoices')->group(function () {
+    Route::get('', [InvoiceController::class, 'index']);
+    Route::post('', [InvoiceController::class, 'store']);
 });
 
 Route::get('search', [SearchController::class, 'index'])->withoutMiddleware('auth:api');

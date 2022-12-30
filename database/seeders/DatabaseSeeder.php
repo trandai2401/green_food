@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $invoiceStatus = new InvoiceStatusSeeder;
+        $invoiceStatus->run();
         // User::factory(10)->create();
         $category = new CategorySeeder;
         $category->run();
