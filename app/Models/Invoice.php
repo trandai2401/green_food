@@ -23,4 +23,9 @@ class Invoice extends Model
     protected $hidden = [
         'created_at', 'updated_at',
     ];
+
+    public function invoiceItems()
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
 }

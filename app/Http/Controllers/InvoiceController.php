@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Models\CartItem;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
@@ -74,9 +75,24 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show(Invoice $invoice)
+    public function show($invoice_id)
     {
-        //
+        $invoice = Invoice::find($invoice_id);
+        if (!isset($invoice) || Auth::id() != $invoice->user_id) {
+            return response(['message' => 'Không tìm thấy đơn hàng của bạn', 400]);
+        }
+
+
+        $products = Product::join('cart_items', 'products.id', '=', 'cart_items.product_id');
+        $products->join('invoice_items', 'cart_items.id', '=', 'invoice_items.cart_item_id');
+        $products->whereRaw('cart_items.user_id', Auth::id());
+        $products->whereRaw('invoice_items.invoice_id', $invoice_id);
+        $products->selectRaw('products.*,invoice_items.*');
+
+        $products = $products->get();
+        $invoice->detail = $products;
+
+        return  $invoice;
     }
 
     /**

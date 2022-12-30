@@ -58,6 +58,7 @@ Route::get("check", function () {
 Route::prefix('invoices')->group(function () {
     Route::get('', [InvoiceController::class, 'index']);
     Route::post('', [InvoiceController::class, 'store']);
+    Route::get('/{invoice_id}', [InvoiceController::class, 'show']);
 });
 
 Route::get('search', [SearchController::class, 'index'])->withoutMiddleware('auth:api');
