@@ -19,6 +19,7 @@ class InvoiceController extends Controller
     {
         //
         $user_id  = Auth::id();
+        return $user_id;
         $invoices = Invoice::whereRaw(" user_id = ?", [$user_id]);
 
         $invoices = $invoices->get();

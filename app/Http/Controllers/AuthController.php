@@ -2,85 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         //
     }
     public function signIn(Request $request)
     {
-        $user = Auth::attempt([
+        $userCheck = Auth::attempt([
             'username' => $request->username,
             'password' => $request->password
         ]);
 
-        if ($user) {
-            return Auth::user();
+        if ($userCheck) {
+            $user  = User::find(Auth::id());
+            $user->api_token = Str::random(80);
+            $user->save();
+
+            return $user;
         } else {
             return response([
                 'error' => 'Tên đăng nhập hoặc mật khẩu sai',
-            ], 200);
+            ], 403);
         }
     }
 
     public function logOut()
     {
-        Auth::logout();
+        $user = Auth::id();
+        $u  = User::find(Auth::id());
+        $u->api_token = Str::random(80);
+        $u->save();
         return response([
             'message' => 'Đăng xuất thành công',
         ], 200);
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function check(Request $request)
     {
-        //
-    }
+        $user = User::where('api_token', $request->query('api_token'))->get();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        if (count($user)) {
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            $user->makeHidden('role_id', 'google_id');
+            $cartItems = CartItem::where('user_id', $user[0]->id)->get();
+            $cartItems->load('product');
+            return response([
+                'profile' => $user[0],
+                'cart' => ['items' => $cartItems, 'amount' => count($cartItems)]
+            ],);
+        } else {
+            return response(['error' => false], 403);
+        }
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\CartItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -50,10 +51,8 @@ Route::prefix('users')->group(function () {
 });
 
 Route::post("sign_in", [AuthController::class, 'signIn'])->withoutMiddleware('auth:api');
-Route::post("log_out", [AuthController::class, 'logOut'])->withoutMiddleware('auth:api');
-Route::get("check", function () {
-    return Auth::user();
-});
+Route::post("log_out", [AuthController::class, 'logOut']);
+Route::get("check", [AuthController::class, 'check'])->withoutMiddleware('auth:api');
 
 Route::prefix('invoices')->group(function () {
     Route::get('', [InvoiceController::class, 'index']);
