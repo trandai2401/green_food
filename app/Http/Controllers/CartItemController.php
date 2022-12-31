@@ -6,10 +6,7 @@ use App\Exceptions\DemoEx;
 use App\Models\CartItem;
 use App\Http\Requests\StoreCartItemRequest;
 use App\Http\Requests\UpdateCartItemRequest;
-use Facade\FlareClient\Http\Response;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Stmt\TryCatch;
 
 class CartItemController extends Controller
 {
@@ -17,7 +14,17 @@ class CartItemController extends Controller
     public function index()
     {
         $user_id = Auth::id();
-        $cartItem = CartItem::where('user_id', $user_id)->get();
+        $cartItem = CartItem::where('user_id', $user_id)->where('activity', 1)->get();
+        $cartItem->load('product');
+        return $cartItem;
+
+        $cartItem = CartItem::whereRaw("user_id = ? and activity = 1 ", [$user_id]);
+        $cartItem->join('products', 'products.id', '=', 'cart_items.product_id');
+        $cartItem->join('categories', 'categories.id', '=', 'products.category_id');
+        $cartItem->select('cart_items.*', 'categories.*');
+
+        // $cartItem = CartItem::with('product')->get();
+        $cartItem = $cartItem->get();
         return $cartItem;
     }
 
