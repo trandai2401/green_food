@@ -19,6 +19,10 @@ class SearchController extends Controller
         $limit = $request->query('limit');
         $orderBy =  $request->query('orderBy');
         $dimension =  $request->query('dimension');
+        $order = $request->query('order');
+        $by = $request->query('by');
+
+
 
         if (!isset($offset)) {
             $offset  = 0;
@@ -41,15 +45,25 @@ class SearchController extends Controller
 
         // return isset($keyword);
         // $rs->selectRaw('*, products.id as product_id');
+
         if (isset($orderBy) && $orderBy == 'sold') {
             $rs->join('cart_items', 'products.id', '=', 'cart_items.product_id', 'left outer');
             $rs->select('products.*', DB::raw('COALESCE(SUM(quantity),0) as total_sales'))->groupBy('products.id');
-
-            // // $rs->join('categories', 'products.category_id', '=', 'categories.id');
-
-            // $rs = $rs->whereIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
             $rs->orderBy(DB::raw('COALESCE(SUM(quantity),0)'), 'desc');
         }
+
+        if (isset($price_starts)) {
+            $rs->whereRaw('price >=  ? ', [$price_starts]);
+        }
+
+        if (isset($end_price)) {
+            $rs->whereRaw('price <=  ? ', [$end_price]);
+        }
+
+        if (isset($order) && isset($by)) {
+            $rs->orderBy(DB::raw($by), $order);
+        }
+
         $pages = ceil($rs->count() / $limit);
 
 

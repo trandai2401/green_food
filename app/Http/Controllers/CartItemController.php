@@ -49,7 +49,9 @@ class CartItemController extends Controller
             $cartItem['quantity'] += $request->quantity;
             $cartItem->save();
 
-            return $cartItem;
+            $cartItems = CartItem::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+            $cartItems->load('product');
+            return response(['items' => $cartItems, 'amount' => count($cartItems)]);
         } catch (\Throwable $th) {
             throw new DemoEx;
         }
@@ -86,23 +88,35 @@ class CartItemController extends Controller
      */
     public function update(UpdateCartItemRequest $request, $cartItemId)
     {
-        if ($request['quantity'] <= 0) {
-            $this->destroy($cartItemId);
-        }
-        $user_id = Auth::id();
-
-        $cartItem = CartItem::firstOrNew([
-            'user_id' => $user_id,
-            'id' => $cartItemId,
-        ]);
 
         try {
-            $cartItem['quantity'] = $request['quantity'];
-            $cartItem->save();
-        } catch (\Throwable $th) {
-        }
 
-        return $cartItem;
+            $user_id = Auth::id();
+
+            if ($request['quantity'] <= 0) {
+                $this->destroy($cartItemId);
+                // return response(['message' => 'Đã xóa cái lày ra khỏi giỏ hàng']);
+            } else {
+
+                $cartItem = CartItem::firstOrNew([
+                    'user_id' => $user_id,
+                    'id' => $cartItemId,
+                ]);
+
+                $cartItem['quantity'] = $request->quantity;
+                $cartItem->save();
+            }
+
+
+
+
+            $cartItems = CartItem::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+            $cartItems->load('product');
+            return response(['items' => $cartItems, 'amount' => count($cartItems)]);
+        } catch (\Throwable $th) {
+            return  $th;
+            // response(['message' => 'Có gì đó sai sai',], 400);
+        }
     }
 
     /**
