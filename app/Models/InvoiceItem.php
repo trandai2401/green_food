@@ -21,4 +21,9 @@ class InvoiceItem extends Model
     protected $hidden = [
         'created_at', 'updated_at',
     ];
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
 }

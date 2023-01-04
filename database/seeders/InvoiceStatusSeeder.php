@@ -14,6 +14,10 @@ class InvoiceStatusSeeder extends Seeder
      */
     public function run()
     {
-        InvoiceStatus::create(['name' => 'Chưa thanh toán']);
+        InvoiceStatus::create(['name' => 'Đang đợi xác nhận']);
+        InvoiceStatus::create(['name' => 'Đang chuẩn bị']);
+        InvoiceStatus::create(['name' => 'ĐAng được vận chuyển']);
+        InvoiceStatus::create(['name' => 'Đã nhận được']);
+        InvoiceStatus::create(['name' => 'Đã hủy']);
     }
 }

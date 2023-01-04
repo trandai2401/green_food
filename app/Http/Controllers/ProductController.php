@@ -7,6 +7,8 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Media;
+use App\Models\Review;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -79,11 +81,70 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
+        $limit  = $request->limit;
+        if (!isset($limit)) {
+            $limit = 8;
+        }
+
+        $page = $request->page;
+        if (!isset($page)) {
+            $page = 1;
+        }
+
         $product = Product::find($id);
         $product->load('category');
-        return $product;
+
+        $reviews = Review::join('invoice_items', 'reviews.invoice_item_id', '=', 'invoice_items.id');
+        $reviews->join('cart_items', 'invoice_items.cart_item_id', '=', 'cart_items.id');
+        $reviews->join('products', 'cart_items.product_id', '=', 'products.id');
+        $reviews->join('users', 'cart_items.user_id', '=', 'users.id');
+
+        $reviews->where('products.id', $id);
+        $reviews->selectRaw('reviews.*, users.name');
+        $reviews->offset(($page - 1) * $limit);
+        $reviews->limit($limit);
+
+        $reviews = $reviews->get();
+
+
+
+
+
+
+
+
+        $reviews2 = Review::join('invoice_items', 'reviews.invoice_item_id', '=', 'invoice_items.id');
+        $reviews2->join('cart_items', 'invoice_items.cart_item_id', '=', 'cart_items.id');
+        $reviews2->join('products', 'cart_items.product_id', '=', 'products.id');
+        $reviews2->where('products.id', $request->id);
+        $reviews2->selectRaw('reviews.*, products.name');
+        $reviews2 = $reviews2->get();
+
+        $pages = ceil($reviews2->count() / $limit);
+
+
+        $product->rating_rate = $reviews2->Sum('rating') / ($reviews2->count() != 0 ? 1 : 1);
+
+
+
+
+
+
+
+        return [
+            'product' => $product,
+            'reviews' => $reviews,
+            'pages' => $pages,
+            'ratings' => [
+                1 => $reviews2->where('rating', 1)->count(),
+                2 => $reviews2->where('rating', 2)->count(),
+                3 => $reviews2->where('rating', 3)->count(),
+                4 => $reviews2->where('rating', 4)->count(),
+                5 => $reviews2->where('rating', 5)->count(),
+            ]
+        ];
     }
 
     /**

@@ -44,12 +44,13 @@ class CartItemController extends Controller
             $cartItem = CartItem::firstOrNew([
                 'user_id' => $user_id,
                 'product_id' => $request->product_id,
+                'activity' => 1
             ]);
 
             $cartItem['quantity'] += $request->quantity;
             $cartItem->save();
 
-            $cartItems = CartItem::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+            $cartItems = CartItem::where('user_id', $user_id)->orderBy('created_at', 'desc')->where('activity', 1)->get();
             $cartItems->load('product');
             return response(['items' => $cartItems, 'amount' => count($cartItems)]);
         } catch (\Throwable $th) {
@@ -110,7 +111,7 @@ class CartItemController extends Controller
 
 
 
-            $cartItems = CartItem::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+            $cartItems = CartItem::where('user_id', $user_id)->orderBy('created_at', 'desc')->where('activity', 1)->get();
             $cartItems->load('product');
             return response(['items' => $cartItems, 'amount' => count($cartItems)]);
         } catch (\Throwable $th) {

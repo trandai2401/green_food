@@ -5,6 +5,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\CartItem;
@@ -36,7 +37,7 @@ Route::prefix('cart_item')->group(function () {
 });
 
 Route::prefix('products')->group(function () {
-    Route::get('/{id}', [ProductController::class, 'show']);
+    Route::get('/{id}', [ProductController::class, 'show'])->withoutMiddleware('auth:api');
     Route::get('', [ProductController::class, 'index'])->withoutMiddleware('auth:api');
     Route::post('', [ProductController::class, 'store']);
 });
@@ -57,6 +58,13 @@ Route::get("check", [AuthController::class, 'check'])->withoutMiddleware('auth:a
 Route::prefix('invoices')->group(function () {
     Route::get('', [InvoiceController::class, 'index']);
     Route::post('', [InvoiceController::class, 'store']);
+});
+
+Route::prefix('reviews')->group(function () {
+    Route::get('search', [ReviewController::class, 'search'])->withoutMiddleware('auth:api');
+    Route::get('check', [ReviewController::class, 'check']);
+
+    Route::post('', [ReviewController::class, 'store']);
 });
 
 Route::get('search', [SearchController::class, 'index'])->withoutMiddleware('auth:api');

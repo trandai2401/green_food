@@ -53,7 +53,7 @@ class AuthController extends Controller
         if (count($user)) {
 
             $user->makeHidden('role_id', 'google_id');
-            $cartItems = CartItem::where('user_id', $user[0]->id)->orderBy('created_at', 'desc')->get();
+            $cartItems = CartItem::where('user_id', $user[0]->id)->orderBy('created_at', 'desc')->where('activity', 1)->get();
             $cartItems->load('product');
             return response([
                 'profile' => $user[0],
