@@ -57,6 +57,8 @@ Route::get("check", [AuthController::class, 'check'])->withoutMiddleware('auth:a
 
 Route::prefix('invoices')->group(function () {
     Route::get('', [InvoiceController::class, 'index']);
+    Route::get('/{id}', [InvoiceController::class, 'show']);
+
     Route::post('', [InvoiceController::class, 'store']);
 });
 

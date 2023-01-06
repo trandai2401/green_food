@@ -27,7 +27,14 @@ class AuthController extends Controller
             $user->api_token = Str::random(80);
             $user->save();
 
-            return $user;
+
+            $cartItems = CartItem::where('user_id', $user->id)->orderBy('created_at', 'desc')->where('activity', 1)->get();
+            $cartItems->load('product');
+
+            return [
+                'user' => $user,
+                'cart' => $cartItems
+            ];
         } else {
             return response([
                 'error' => 'Tên đăng nhập hoặc mật khẩu sai',

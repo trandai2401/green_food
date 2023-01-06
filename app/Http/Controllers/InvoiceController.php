@@ -7,6 +7,7 @@ use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
@@ -75,9 +76,21 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show(Invoice $invoice)
+    public function show($id)
     {
-        //
+        $invoice = Invoice::find($id);
+
+        $cartItems  = CartItem::join('invoice_items', 'cart_items.id', 'invoice_items.cart_item_id');
+        $cartItems->join('products', 'cart_items.product_id', 'products.id');
+        $cartItems->join('reviews', 'invoice_items.id', '=', 'reviews.invoice_item_id', 'left outer');
+        $cartItems->where('invoice_items.invoice_id', $id);
+        $cartItems->selectRaw('cart_items.*,invoice_items.price,invoice_items.id as invoice_item_id, count(reviews.id) as reviewed');
+        $cartItems->groupBy(DB::raw(' invoice_items.id'));
+        $cartItems =  $cartItems->get();
+        $cartItems->load('product');
+
+        $invoice->invoice_items  = $cartItems;
+        return  $invoice;
     }
 
     /**

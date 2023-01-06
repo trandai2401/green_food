@@ -23,7 +23,6 @@ class CartItemController extends Controller
         $cartItem->join('categories', 'categories.id', '=', 'products.category_id');
         $cartItem->select('cart_items.*', 'categories.*');
 
-        // $cartItem = CartItem::with('product')->get();
         $cartItem = $cartItem->get();
         return $cartItem;
     }

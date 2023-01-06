@@ -22,6 +22,18 @@ class Invoice extends Model
         'total'
     ];
     protected $hidden = [
-        'created_at', 'updated_at',
+        'updated_at',
     ];
+
+    protected $with = ['status'];
+
+    public function status()
+    {
+        return $this->belongsTo(InvoiceStatus::class);
+    }
+
+    public function invoice_items()
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
 }
