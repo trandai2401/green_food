@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
 use App\Models\CartItem;
 use App\Models\User;
@@ -60,3 +61,4 @@ Route::prefix('invoices')->group(function () {
 });
 
 Route::get('search', [SearchController::class, 'index'])->withoutMiddleware('auth:api');
+Route::get('callback', [SocialController::class, 'callback'])->withoutMiddleware('auth:api');
