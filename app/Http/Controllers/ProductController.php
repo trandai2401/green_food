@@ -125,7 +125,7 @@ class ProductController extends Controller
         $pages = ceil($reviews2->count() / $limit);
 
 
-        $product->rating_rate = $reviews2->Sum('rating') / ($reviews2->count() != 0 ? 1 : 1);
+        $product->rating_rate =  round($reviews2->Sum('rating') / ($reviews2->count() != 0 ? $reviews2->count() : 1), 1);
 
 
 
