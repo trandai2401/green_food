@@ -7,6 +7,7 @@ use App\Http\Requests\StoreReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
 use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PDOException;
 
 class ReviewController extends Controller
@@ -74,9 +75,10 @@ class ReviewController extends Controller
     public function check(Request $request)
     {
         try {
+            $user_id = Auth::id();
             $invoice_item = InvoiceItem::find($request->query('id'));
 
-            if ($invoice_item->invoice->status_id == 4) {
+            if ($invoice_item->invoice->status_id == 4 && $user_id == $invoice_item->invoice->user_id) {
                 $review = Review::where('invoice_item_id', $request->query('id'))->get();
                 if ($review->count() == 0) {
                     return true;
