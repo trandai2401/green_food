@@ -33,7 +33,7 @@ class AuthController extends Controller
 
             return [
                 'user' => $user,
-                'cart' => $cartItems
+                'cart' => ['items' => $cartItems, 'amount' => count($cartItems)]
             ];
         } else {
             return response([
@@ -59,7 +59,7 @@ class AuthController extends Controller
 
         if (count($user)) {
 
-            $user->makeHidden('role_id', 'google_id');
+            $user->makeHidden('google_id');
             $cartItems = CartItem::where('user_id', $user[0]->id)->orderBy('created_at', 'desc')->where('activity', 1)->get();
             $cartItems->load('product');
             return response([

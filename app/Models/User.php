@@ -11,6 +11,15 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole($roles)
+    {
+        return in_array($this->role->name, $roles);
+    }
     /**
      * The attributes that are mass assignable.
      *

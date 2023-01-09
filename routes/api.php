@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Invoices;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\CartItem;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,3 +72,10 @@ Route::prefix('reviews')->group(function () {
 });
 
 Route::get('search', [SearchController::class, 'index'])->withoutMiddleware('auth:api');
+
+Route::middleware('isStaff')->prefix('admin')->group(function () {
+    Route::prefix('invoices')->group(function () {
+        Route::get('', [Invoices::class, 'index']);
+        Route::post('/{id}', [Invoices::class, 'update']);
+    });
+});
