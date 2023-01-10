@@ -54,6 +54,8 @@ Route::prefix('users')->group(function () {
 });
 
 Route::post("sign_in", [AuthController::class, 'signIn'])->withoutMiddleware('auth:api');
+Route::post("sign_in_with_google", [AuthController::class, 'signInWithGoogle'])->withoutMiddleware('auth:api');
+
 Route::post("log_out", [AuthController::class, 'logOut']);
 Route::get("check", [AuthController::class, 'check'])->withoutMiddleware('auth:api');
 
