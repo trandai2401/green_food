@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('role_id');
             $table->date('DOB')->nullable();
             $table->string('google_id')->nullable();
+            $table->string('avatar', 300)->nullable()->default('https://i.pinimg.com/originals/ff/07/2d/ff072dd71c68ae470e91459202942f91.jpg');
             $table->foreign('role_id')->references('id')->on('roles');
 
 
