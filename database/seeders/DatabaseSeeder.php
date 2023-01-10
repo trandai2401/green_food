@@ -28,11 +28,11 @@ class DatabaseSeeder extends Seeder
         $role->run();
 
         User::create([
-            'name' => "admin",
-            'email' => 'admin@gmail.com',
+            'name' => "thuhoa",
+            'email' => 'thuhoa@gmail.com',
             'password' => bcrypt('12345'),
-            'username' => 'admin',
-            'role_id' => 1,
+            'username' => 'thuhoa',
+            'role_id' => 4,
             'api_token' => Str::random(80),
         ]);
 
