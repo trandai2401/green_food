@@ -36,6 +36,15 @@ class DatabaseSeeder extends Seeder
             'api_token' => Str::random(80),
         ]);
 
+        User::create([
+            'name' => "Admin",
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('12345'),
+            'username' => 'Admin',
+            'role_id' => 1,
+            'api_token' => Str::random(80),
+        ]);
+
         $product = new ProductSeeder;
         $product->run();
 
