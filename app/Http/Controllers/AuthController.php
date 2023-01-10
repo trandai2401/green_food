@@ -64,6 +64,7 @@ class AuthController extends Controller
                 'role_id' => 4,
                 'google_id' => $request->google_id,
                 'api_token' => Str::random(80),
+                'avatar' => $request->avatar
             ]);
 
             $userCheck = Auth::attempt([
